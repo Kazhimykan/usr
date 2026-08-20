@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Покупки для дома</title>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- ШАПКА -->
+
+  <header class="header">
+
+    <p class="small-title">
+      🏠 Домашний помощник
+    </p>
+
+    <h1>
+      Покупки для дома
+    </h1>
+
+    <p class="description">
+      Покупки, запасы, расходы,
+      цены магазинов и история цен
+    </p>
+
+  </header>
+
+
+  <!-- СВОДКА -->
+
+  <section class="summary">
+
+    <div class="summary-card">
+      <span>Нужно купить</span>
+      <strong id="needCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Уже дома</span>
+      <strong id="homeCount">0</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Потрачено</span>
+      <strong id="spentTotal">0 ₸</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Бюджет</span>
+      <strong id="monthlyBudget">0 ₸</strong>
+    </div>
+
+    <div class="summary-card">
+      <span>Осталось</span>
+      <strong id="remainingBudget">0 ₸</strong>
+    </div>
+
+  </section>
+
+
+  <!-- БЮДЖЕТ -->
+
+  <section class="card">
+
+    <h2>
+      💰 Бюджет на месяц
+    </h2>
+
+    <div class="budget-row">
+
+      <input
+        id="budgetInput"
+        type="number"
+        min="0"
+        step="100"
+        placeholder="Например: 150000"
+      >
+
+      <button
+        id="saveBudgetButton"
+        class="blue-button"
+        type="button"
+      >
+        Сохранить бюджет
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- АНАЛИТИКА -->
+
+  <section class="card">
+
+    <div class="analytics-header">
+
+      <div>
+
+        <p class="small-title">
+          Статистика месяца
+        </p>
+
+        <h2>
+          📊 На что уходит больше денег
+        </h2>
+
+      </div>
+
+      <div
+        id="budgetPercentBadge"
+        class="percent-badge"
+      >
+        0%
+      </div>
+
+    </div>
+
+
+    <div class="budget-progress-info">
+
+      <span>
+        Использовано бюджета
+      </span>
+
+      <strong id="budgetPercentText">
+        0%
+      </strong>
+
+    </div>
+
+
+    <div class="budget-progress">
+
+      <div
+        id="budgetProgressBar"
+        class="budget-progress-bar"
+      ></div>
+
+    </div>
+
+
+    <div class="analytics-summary">
+
+      <div class="analytics-small-card">
+
+        <span>
+          Потрачено
+        </span>
+
+        <strong id="analyticsSpent">
+          0 ₸
+        </strong>
+
+      </div>
+
+
+      <div class="analytics-small-card">
+
+        <span>
+          Осталось бюджета
+        </span>
+
+        <strong id="analyticsRemaining">
+          0 ₸
+        </strong>
+
+      </div>
+
+
+      <div class="analytics-small-card">
+
+        <span>
+          Самая большая категория
+        </span>
+
+        <strong id="topCategory">
+          —
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div id="categoryChart"></div>
+
+  </section>
+
+
+  <!-- ДОБАВИТЬ ТОВАР -->
+
+  <section class="card collapsible-card">
+
+    <button
+      id="toggleProductFormButton"
+      class="toggle-form-button"
+      type="button"
+    >
+
+      <span>
+        ➕ Добавить товар
+      </span>
+
+      <span id="productFormArrow">
+        ▼
+      </span>
+
+    </button>
+
+
+    <div
+      id="productFormContainer"
+      class="collapsible-content hidden"
+    >
+
+      <form id="shoppingForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label for="productName">
+              Название товара
+            </label>
+
+            <input
+              id="productName"
+              type="text"
+              placeholder="Например: Говядина"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="category">
+              Категория
+            </label>
+
+            <select id="category">
+
+              <option value="Овощи">
+                🥕 Овощи
+              </option>
+
+              <option value="Фрукты">
+                🍎 Фрукты
+              </option>
+
+              <option value="Мясо">
+                🥩 Мясо
+              </option>
+
+              <option value="Молочные продукты">
+                🥛 Молочные продукты
+              </option>
+
+              <option value="Продукты">
+                🍞 Продукты
+              </option>
+
+              <option value="Бытовая химия">
+                🧴 Бытовая химия
+              </option>
+
+              <option value="Для дома">
+                🧻 Для дома
+              </option>
+
+              <option value="Другое">
+                📦 Другое
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="quantity">
+              Нужно купить
+            </label>
+
+            <input
+              id="quantity"
+              type="number"
+              min="0.1"
+              step="0.1"
+              value="1"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="unit">
+              Единица
+            </label>
+
+            <select id="unit">
+
+              <option value="шт">
+                шт
+              </option>
+
+              <option value="кг">
+                кг
+              </option>
+
+              <option value="л">
+                литр
+              </option>
+
+              <option value="уп">
+                упаковка
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="price">
+              Плановая цена
+            </label>
+
+            <input
+              id="price"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="Например: 3800"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="purchaseDate">
+              Дата
+            </label>
+
+            <input
+              id="purchaseDate"
+              type="date"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="storeName">
+              Магазин
+            </label>
+
+            <input
+              id="storeName"
+              type="text"
+              placeholder="Например: Магнит"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="add-button"
+          type="submit"
+        >
+          + Добавить в список
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- ТЕКУЩАЯ ЦЕНА -->
+
+  <section class="card collapsible-card">
+
+    <button
+      id="toggleCurrentPriceButton"
+      class="toggle-form-button current-price-toggle"
+      type="button"
+    >
+
+      <span>
+        💵 Добавить текущую цену
+      </span>
+
+      <span id="currentPriceArrow">
+        ▼
+      </span>
+
+    </button>
+
+
+    <div
+      id="currentPriceContainer"
+      class="collapsible-content hidden"
+    >
+
+      <p class="form-help">
+        Эта цена нужна только для сравнения магазинов.
+        Она не считается покупкой и не уменьшает бюджет.
+      </p>
+
+
+      <form id="currentPriceForm">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+
+            <label for="currentProductName">
+              Название товара
+            </label>
+
+            <input
+              id="currentProductName"
+              type="text"
+              placeholder="Например: Мыло"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currentCategory">
+              Категория
+            </label>
+
+            <select id="currentCategory">
+
+              <option value="Овощи">
+                🥕 Овощи
+              </option>
+
+              <option value="Фрукты">
+                🍎 Фрукты
+              </option>
+
+              <option value="Мясо">
+                🥩 Мясо
+              </option>
+
+              <option value="Молочные продукты">
+                🥛 Молочные продукты
+              </option>
+
+              <option value="Продукты">
+                🍞 Продукты
+              </option>
+
+              <option value="Бытовая химия">
+                🧴 Бытовая химия
+              </option>
+
+              <option value="Для дома">
+                🧻 Для дома
+              </option>
+
+              <option value="Другое">
+                📦 Другое
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currentUnit">
+              Единица
+            </label>
+
+            <select id="currentUnit">
+
+              <option value="шт">
+                шт
+              </option>
+
+              <option value="кг">
+                кг
+              </option>
+
+              <option value="л">
+                литр
+              </option>
+
+              <option value="уп">
+                упаковка
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currentPrice">
+              Текущая цена
+            </label>
+
+            <input
+              id="currentPrice"
+              type="number"
+              min="0"
+              step="1"
+              placeholder="Например: 200"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currentStore">
+              Магазин
+            </label>
+
+            <input
+              id="currentStore"
+              type="text"
+              placeholder="Например: Смарт"
+              required
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label for="currentPriceDate">
+              Дата цены
+            </label>
+
+            <input
+              id="currentPriceDate"
+              type="date"
+              required
+            >
+
+          </div>
+
+        </div>
+
+
+        <button
+          class="current-price-button"
+          type="submit"
+        >
+          💾 Сохранить текущую цену
+        </button>
+
+      </form>
+
+    </div>
+
+  </section>
+
+
+  <!-- ВКЛАДКИ -->
+
+  <section class="tabs">
+
+    <button
+      id="needTab"
+      class="tab-button active"
+      type="button"
+    >
+      🛒 Нужно купить
+    </button>
+
+    <button
+      id="homeTab"
+      class="tab-button"
+      type="button"
+    >
+      🏠 Уже дома
+    </button>
+
+    <button
+      id="usedTab"
+      class="tab-button"
+      type="button"
+    >
+      📊 Использовано
+    </button>
+
+    <button
+      id="pricesTab"
+      class="tab-button"
+      type="button"
+    >
+      🏪 Цены магазинов
+    </button>
+
+    <button
+      id="inflationTab"
+      class="tab-button"
+      type="button"
+    >
+      📈 Инфляция цен
+    </button>
+
+  </section>
+
+
+  <!-- НУЖНО КУПИТЬ -->
+
+  <section
+    id="needSection"
+    class="card tab-section"
+  >
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          🛒 Нужно купить
+        </h2>
+
+        <p class="section-description">
+          Запланированные покупки
+        </p>
+
+      </div>
+
+      <button
+        id="clearNeedButton"
+        class="clear-button"
+        type="button"
+      >
+        Очистить
+      </button>
+
+    </div>
+
+    <div id="needList"></div>
+
+  </section>
+
+
+  <!-- УЖЕ ДОМА -->
+
+  <section
+    id="homeSection"
+    class="card tab-section hidden"
+  >
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          🏠 Уже есть дома
+        </h2>
+
+        <p class="section-description">
+          Текущие домашние запасы
+        </p>
+
+      </div>
+
+      <button
+        id="clearHomeButton"
+        class="clear-button"
+        type="button"
+      >
+        Очистить
+      </button>
+
+    </div>
+
+    <div id="homeList"></div>
+
+  </section>
+
+
+  <!-- ИСПОЛЬЗОВАНО -->
+
+  <section
+    id="usedSection"
+    class="card tab-section hidden"
+  >
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          📊 Использовано
+        </h2>
+
+        <p class="section-description">
+          История расхода товаров
+        </p>
+
+      </div>
+
+      <button
+        id="clearUsedButton"
+        class="clear-button"
+        type="button"
+      >
+        Очистить
+      </button>
+
+    </div>
+
+
+    <div class="usage-periods">
+
+      <div class="usage-period-card">
+
+        <span>
+          Сегодня
+        </span>
+
+        <div id="todayUsage">
+          Нет данных
+        </div>
+
+      </div>
+
+
+      <div class="usage-period-card">
+
+        <span>
+          Последние 7 дней
+        </span>
+
+        <div id="weekUsage">
+          Нет данных
+        </div>
+
+      </div>
+
+
+      <div class="usage-period-card">
+
+        <span>
+          Этот месяц
+        </span>
+
+        <div id="monthUsage">
+          Нет данных
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div id="usedList"></div>
+
+  </section>
+
+
+  <!-- ЦЕНЫ МАГАЗИНОВ -->
+
+  <section
+    id="pricesSection"
+    class="card tab-section hidden"
+  >
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          🏪 Цены магазинов
+        </h2>
+
+        <p class="section-description">
+          Категория → товар → магазины →
+          покупка и текущая цена
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <input
+      id="priceSearchInput"
+      class="search-input"
+      type="text"
+      placeholder="Поиск товара или магазина..."
+    >
+
+
+    <div class="price-category-filters">
+
+      <button
+        class="price-category-button active"
+        data-price-category="Все"
+        type="button"
+      >
+        Все
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Мясо"
+        type="button"
+      >
+        🥩 Мясо
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Овощи"
+        type="button"
+      >
+        🥕 Овощи
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Фрукты"
+        type="button"
+      >
+        🍎 Фрукты
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Молочные продукты"
+        type="button"
+      >
+        🥛 Молочные
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Продукты"
+        type="button"
+      >
+        🍞 Продукты
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Бытовая химия"
+        type="button"
+      >
+        🧴 Химия
+      </button>
+
+      <button
+        class="price-category-button"
+        data-price-category="Для дома"
+        type="button"
+      >
+        🧻 Для дома
+      </button>
+
+    </div>
+
+
+    <div id="priceComparisonList"></div>
+
+  </section>
+
+
+  <!-- ИНФЛЯЦИЯ -->
+
+  <section
+    id="inflationSection"
+    class="card tab-section hidden"
+  >
+
+    <div class="section-header">
+
+      <div>
+
+        <h2>
+          📈 Инфляция цен
+        </h2>
+
+        <p class="section-description">
+          Изменение всех сохранённых цен
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <input
+      id="inflationSearchInput"
+      class="search-input"
+      type="text"
+      placeholder="Поиск товара или магазина..."
+    >
+
+
+    <div id="inflationList"></div>
+
+  </section>
+
+</div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
